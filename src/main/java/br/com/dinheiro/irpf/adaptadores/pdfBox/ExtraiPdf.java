@@ -27,12 +27,17 @@ public class ExtraiPdf {
 
 	private PDDocument lerPdf(String nomeArquivo) {
 		String caminhoArquivos = env.getProperty("diretorio") + "/"; 
+		
 		File file = new File(caminhoArquivos + nomeArquivo);
+		
 		try {
 			PDFParser parser = new PDFParser(new RandomAccessBufferedFileInputStream(file));
 			parser.parse();
 			COSDocument documento = parser.getDocument();
-			return new PDDocument(documento);
+			
+			PDDocument pdf = new PDDocument(documento);
+			documento.close();
+			return pdf;
 		} catch (IOException e) {
 			throw new RuntimeException("Não foi possível extrair dados do PDF", e);
 		}
@@ -42,14 +47,19 @@ public class ExtraiPdf {
 	public List<PaginaPdfDTO> extraiLinhasPdf(String nomeArquivo) {
 		try {
 			PDDocument documento = lerPdf(nomeArquivo);
+			
 			PDFTextStripper extraiDados = new PDFTextStripper();
 
 			List<PaginaPdfDTO> paginas = new ArrayList<PaginaPdfDTO>();
+			
 
 			for (int i = 0; documento.getNumberOfPages() >= i; i++) {
+				extraiDados.setStartPage(i);
+				extraiDados.setEndPage(i);
 				String paginaEmLinhas[] = extraiDados.getText(documento).split("\\r?\\n");
 				paginas.add(new PaginaPdfDTO(Lists.newArrayList(paginaEmLinhas)));
 			}
+			documento.close();
 			return paginas;
 		} catch (IOException e) {
 			throw new RuntimeException("Não foi possível extrair linhas do PDF", e);

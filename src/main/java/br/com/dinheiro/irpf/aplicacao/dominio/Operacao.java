@@ -27,6 +27,5 @@ public class Operacao {
 		this.data = data;
 	}
 	
-	
 
 }

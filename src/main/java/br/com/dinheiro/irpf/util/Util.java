@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
+import br.com.dinheiro.irpf.adaptadores.dto.PaginaPdfDTO;
+
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -57,30 +59,35 @@ public class Util {
 			PDFParser parser = new PDFParser(new RandomAccessBufferedFileInputStream(file));
 			parser.parse();
 			COSDocument cosDoc = parser.getDocument();
-			PDDocument pdDoc = new PDDocument(cosDoc);
 			
-			PDFTextStripper pdfStripper = new PDFTextStripper();
+			PDDocument documento = new PDDocument(cosDoc);
 			
-			String dadosDoc = pdfStripper.getText(pdDoc);
+			PDFTextStripper extraiDados = new PDFTextStripper();
 			
+			String dadosDoc = extraiDados.getText(documento);
 			
-			System.out.println("asdfdasfds");
-			
-			List<String> linhas = Lists.newArrayList(dadosDoc.split("\\r?\\n"));
-			
-			linhas.forEach(v -> System.out.println(v));
+			//cosDoc.close();
+			//documento.close();
 			
 			
-			 List<String> novasLinhas = linhas.stream()
-				.filter(v -> v.contains("1-BOVESPA"))
-				.collect(Collectors.toList());
+//			List<String> linhas = Lists.newArrayList(dadosDoc.split("\\r?\\n"));
+			
+//			linhas.forEach(v -> System.out.println(v));
+			
+			
+//			 List<String> novasLinhas = linhas.stream()
+//				.filter(v -> v.contains("1-BOVESPA"))
+//				.collect(Collectors.toList());
 			 
-			// novasLinhas.forEach(v -> System.out.println(v));
-			
-//			for (int i = 1; i <= pdDoc.getNumberOfPages(); i++) {
-//				String parsedText = pdfStripper.getText(pdDoc);
-//				//System.out.println("Página " + i + ": " + parsedText);
-//			}
+			 
+			 for (int i = 0; documento.getNumberOfPages() >= i; i++) {
+				 extraiDados.setStartPage(i);
+				 extraiDados.setEndPage(i);
+				String paginaEmLinhas =  extraiDados.getText(documento);
+				List<String> linhas = Lists.newArrayList(paginaEmLinhas.split("\\r?\\n"));
+				linhas.forEach(v -> System.out.println(v));
+				System.out.println("***** ***** ***** ***** ***** ***** ***** ***** ***** ***** ***** ***** ***** ********** ***** ***** ***** ***** *****");
+			}
 		} catch (IOException e) {
 			// Tratar a exceção adequadamente.
 			e.printStackTrace();
