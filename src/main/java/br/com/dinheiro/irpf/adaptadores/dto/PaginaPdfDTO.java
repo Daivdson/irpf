@@ -8,7 +8,6 @@ import lombok.Data;
 public class PaginaPdfDTO {
 	
 	public PaginaPdfDTO(List<String> linhas) {
-		super();
 		this.linhas = linhas;
 	}
 

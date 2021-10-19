@@ -26,7 +26,12 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
+
+### Geral ###
 arquivos-upload
 
 ### VS Code ###
 .vscode/
+
+### OSx ###
+.DS_Store

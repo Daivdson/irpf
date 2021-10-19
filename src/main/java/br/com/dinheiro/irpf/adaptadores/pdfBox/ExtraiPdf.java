@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.dinheiro.irpf.config.propriedades.PropriedadeDiretorio;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.core.env.Environment;
 
 import com.google.common.collect.Lists;
 
@@ -18,16 +18,15 @@ import br.com.dinheiro.irpf.adaptadores.dto.PaginaPdfDTO;
 
 public class ExtraiPdf {
 
-	private Environment env;
+	private PropriedadeDiretorio diretorio;
 
-	public ExtraiPdf(Environment env) {
-		super();
-		this.env = env;
+	public ExtraiPdf(PropriedadeDiretorio diretorio) {
+		this.diretorio = diretorio;
 	}
 
 	private PDDocument lerPdf(String nomeArquivo) {
-		String caminhoArquivos = env.getProperty("diretorio") + "/"; 
-		
+		String caminhoArquivos = diretorio.getCaminho() + "/";
+		System.out.println(caminhoArquivos);
 		File file = new File(caminhoArquivos + nomeArquivo);
 		
 		try {
@@ -36,12 +35,11 @@ public class ExtraiPdf {
 			COSDocument documento = parser.getDocument();
 			
 			PDDocument pdf = new PDDocument(documento);
-			documento.close();
+			//documento.close();
 			return pdf;
 		} catch (IOException e) {
 			throw new RuntimeException("Não foi possível extrair dados do PDF", e);
 		}
-
 	}
 
 	public List<PaginaPdfDTO> extraiLinhasPdf(String nomeArquivo) {
@@ -51,7 +49,6 @@ public class ExtraiPdf {
 			PDFTextStripper extraiDados = new PDFTextStripper();
 
 			List<PaginaPdfDTO> paginas = new ArrayList<PaginaPdfDTO>();
-			
 
 			for (int i = 0; documento.getNumberOfPages() >= i; i++) {
 				extraiDados.setStartPage(i);
@@ -64,7 +61,6 @@ public class ExtraiPdf {
 		} catch (IOException e) {
 			throw new RuntimeException("Não foi possível extrair linhas do PDF", e);
 		}
-
 	}
 
 }
