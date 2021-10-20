@@ -1,24 +1,25 @@
-package br.com.dinheiro.irpf.adaptadores.pdfBox;
+package br.com.dinheiro.irpf.aplicacao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.dinheiro.irpf.adaptadores.pdfBox.dto.PaginaPdfDTO;
-import br.com.dinheiro.irpf.aplicacao.repositorio.RepositorioPdf;
+import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
+import br.com.dinheiro.irpf.aplicacao.dominio.PaginaPdf;
+import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
 import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
 
-public class ExtraiPdfImpl implements RepositorioPdf {
+public class PdfClearImpl implements ServicoPdfClear {
 
-	private ExtraiPdf pdf;
+	private Pdf pdf;
 
-	public ExtraiPdfImpl(ExtraiPdf pdf) {
+	public PdfClearImpl(Pdf pdf) {
 		this.pdf = pdf;
 	}
-
+	
 	@Override
 	public List<Operacao> notaNegociacao(String nomeArquivo) {
-		List<PaginaPdfDTO> paginas = pdf.extraiLinhasPdf(nomeArquivo);
+		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
 		List<String> operacoesPagina01 = new ArrayList<>();
 
 		String bovespa = "1-BOVESPA";

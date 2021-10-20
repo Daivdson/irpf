@@ -1,7 +1,8 @@
 package br.com.dinheiro.irpf.config;
 
-import br.com.dinheiro.irpf.aplicacao.repositorio.RepositorioPdf;
-import br.com.dinheiro.irpf.aplicacao.api.ServicoNotaNegociacao;
+import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
+import br.com.dinheiro.irpf.aplicacao.impl.PdfClearImpl;
+import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,11 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConfiguracaoServico {
 
-    @Autowired
-    private RepositorioPdf pdf;
-
     @Bean
-    public ServicoNotaNegociacao servicoNotaNegociacao() {
-        return new ServicoNotaNegociacao(pdf);
+    public ServicoPdfClear servicoPdfClear(Pdf pdf) {
+        return new PdfClearImpl(pdf);
     }
 }
