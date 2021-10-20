@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.dinheiro.irpf.adaptadores.dto.PaginaPdfDTO;
-import br.com.dinheiro.irpf.aplicacao.RepositorioPdf;
+import br.com.dinheiro.irpf.adaptadores.pdfBox.dto.PaginaPdfDTO;
+import br.com.dinheiro.irpf.aplicacao.repositorio.RepositorioPdf;
 import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ExtraiPdfImpl implements RepositorioPdf {
 

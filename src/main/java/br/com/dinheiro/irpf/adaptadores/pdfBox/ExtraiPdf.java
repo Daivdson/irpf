@@ -14,7 +14,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.google.common.collect.Lists;
 
-import br.com.dinheiro.irpf.adaptadores.dto.PaginaPdfDTO;
+import br.com.dinheiro.irpf.adaptadores.pdfBox.dto.PaginaPdfDTO;
 
 public class ExtraiPdf {
 

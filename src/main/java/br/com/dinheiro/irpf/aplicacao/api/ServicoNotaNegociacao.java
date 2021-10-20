@@ -1,6 +1,6 @@
 package br.com.dinheiro.irpf.aplicacao.api;
 
-import br.com.dinheiro.irpf.aplicacao.RepositorioPdf;
+import br.com.dinheiro.irpf.aplicacao.repositorio.RepositorioPdf;
 import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
 
 import java.util.List;

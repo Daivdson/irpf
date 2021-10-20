@@ -1,6 +1,6 @@
 package br.com.dinheiro.irpf.config;
 
-import br.com.dinheiro.irpf.aplicacao.RepositorioPdf;
+import br.com.dinheiro.irpf.aplicacao.repositorio.RepositorioPdf;
 import br.com.dinheiro.irpf.aplicacao.api.ServicoNotaNegociacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

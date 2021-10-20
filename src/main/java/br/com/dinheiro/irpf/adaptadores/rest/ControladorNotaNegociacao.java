@@ -16,11 +16,11 @@ public class ControladorNotaNegociacao {
     }
 
     @GetMapping(path = "/tes", produces = {APPLICATION_JSON_VALUE})
-    public String getInstallmentOption(@RequestParam("arquivo") String arquivo) {
+    public String importarNotaNegociacao(@RequestParam("arquivo") String arquivo) {
         System.out.println(arquivo);
         servico.notasDeNegociacao(arquivo);
 
-        return "vamos ver";
+        return "Nota de negociacao";
     }
 
 }

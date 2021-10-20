@@ -1,4 +1,4 @@
-package br.com.dinheiro.irpf.adaptadores.dto;
+package br.com.dinheiro.irpf.adaptadores.pdfBox.dto;
 
 import java.util.List;
 

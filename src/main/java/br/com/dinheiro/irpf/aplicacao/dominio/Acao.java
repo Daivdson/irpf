@@ -11,7 +11,6 @@ public class Acao {
 	
 	@Builder
 	public Acao(String nome, String codigo, String tipo) {
-		super();
 		this.nome = nome;
 		this.codigo = codigo;
 		this.tipo = tipo;

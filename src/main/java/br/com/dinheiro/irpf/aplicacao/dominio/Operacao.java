@@ -17,7 +17,6 @@ public class Operacao {
 	
 	@Builder
 	public Operacao(int quantidade, double preco, double valor, String tipoOperacao, Acao acao, String observacao, LocalDateTime data) {
-		super();
 		this.quantidade = quantidade;
 		this.preco = preco;
 		this.valor = valor;

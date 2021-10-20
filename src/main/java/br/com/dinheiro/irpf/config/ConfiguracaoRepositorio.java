@@ -2,7 +2,7 @@ package br.com.dinheiro.irpf.config;
 
 import br.com.dinheiro.irpf.adaptadores.pdfBox.ExtraiPdf;
 import br.com.dinheiro.irpf.adaptadores.pdfBox.ExtraiPdfImpl;
-import br.com.dinheiro.irpf.aplicacao.RepositorioPdf;
+import br.com.dinheiro.irpf.aplicacao.repositorio.RepositorioPdf;
 import br.com.dinheiro.irpf.config.propriedades.PropriedadeDiretorio;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

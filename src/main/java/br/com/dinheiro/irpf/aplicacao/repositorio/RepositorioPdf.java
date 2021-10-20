@@ -1,4 +1,4 @@
-package br.com.dinheiro.irpf.aplicacao;
+package br.com.dinheiro.irpf.aplicacao.repositorio;
 
 
 import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
