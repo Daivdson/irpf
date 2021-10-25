@@ -7,3 +7,5 @@ Api de importação e leitura das notas de corretagem.
 2. (Alternativa) `mvn spring-boot:run -Drun.profiles=dev`
 
 3. Após start da aplicação é possível acessar pelo link: [http://localhost:8085/](http://localhost:8085/)
+
+4. Ideia para o domínio dos dados extraídos: (https://miro.com/app/board/o9J_loak7CA=/?invite_link_id=785499274109)
