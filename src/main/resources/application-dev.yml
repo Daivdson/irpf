@@ -1,5 +1,0 @@
-server:
-  port: 8085
-
-diretorio:
-  caminho: './arquivos-upload'
