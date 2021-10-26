@@ -6,13 +6,13 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class PaginaPdf {
+public class DadosPdf {
 
     @Builder
-    public PaginaPdf(List<String> linhas) {
-        this.linhas = linhas;
+    public DadosPdf(List<String> dados) {
+        this.dados = dados;
     }
 
-    private List<String> linhas;
+    private List<String> dados;
 
 }
