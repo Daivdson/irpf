@@ -28,7 +28,7 @@ target/
 build/
 
 ### Geral ###
-arquivos-upload
+arquivos-upload/*
 
 ### VS Code ###
 .vscode/
