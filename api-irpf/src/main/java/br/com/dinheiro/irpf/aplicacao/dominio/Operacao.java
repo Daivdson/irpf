@@ -1,5 +1,6 @@
 package br.com.dinheiro.irpf.aplicacao.dominio;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import lombok.Builder;
@@ -7,19 +8,21 @@ import lombok.Getter;
 
 @Getter
 public class Operacao {
+	private String tipoNegociacao;
 	private int quantidade;
-	private double preco;
-	private double valor;
+	private BigDecimal precoAcao;
+	private BigDecimal valorOperacao;
 	private String tipoOperacao;
 	private Acao acao;
 	private String observacao;
 	private LocalDateTime data;
 	
 	@Builder
-	public Operacao(int quantidade, double preco, double valor, String tipoOperacao, Acao acao, String observacao, LocalDateTime data) {
+	public Operacao(String tipoNegociacao, int quantidade, BigDecimal precoAcao, BigDecimal valorOperacao, String tipoOperacao, Acao acao, String observacao, LocalDateTime data) {
+		this.tipoNegociacao = tipoNegociacao;
 		this.quantidade = quantidade;
-		this.preco = preco;
-		this.valor = valor;
+		this.precoAcao = precoAcao;
+		this.valorOperacao = valorOperacao;
 		this.tipoOperacao = tipoOperacao;
 		this.acao = acao;
 		this.observacao = observacao;
