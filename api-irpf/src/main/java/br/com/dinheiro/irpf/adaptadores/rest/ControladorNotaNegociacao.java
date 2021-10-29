@@ -18,9 +18,8 @@ public class ControladorNotaNegociacao {
     @GetMapping(path = "/tes", produces = {APPLICATION_JSON_VALUE})
     public String importarNotaNegociacao(@RequestParam("arquivo") String arquivo) {
         System.out.println(arquivo);
-        servico.notaNegociacao(arquivo);
 
-        return "Nota de negociacao";
+        return servico.notaNegociacao(arquivo);
     }
 
 }
