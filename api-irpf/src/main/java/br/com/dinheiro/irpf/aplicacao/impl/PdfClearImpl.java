@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
 import br.com.dinheiro.irpf.aplicacao.dominio.PaginaPdf;
+import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
 import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
 import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
 
@@ -16,11 +17,11 @@ public class PdfClearImpl implements ServicoPdfClear {
 	public PdfClearImpl(Pdf pdf) {
 		this.pdf = pdf;
 	}
-	
+
 	@Override
-	public List<Operacao> notaNegociacao(String nomeArquivo) {
+	public List<Negociacao> notaNegociacao(String nomeArquivo) {
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
-		List<String> operacoesPagina01 = new ArrayList<>();
+		List<String> negociacoesPagina01 = new ArrayList<>();
 
 		String bovespa = "1-BOVESPA";
 		String dataPregao = "Data pregão";//quebra
@@ -32,7 +33,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 
 
 
-		operacoesPagina01 = paginas.get(1).getLinhas().stream()
+		negociacoesPagina01 = paginas.get(1).getLinhas().stream()
 				.filter(v -> v.contains(bovespa))
 				.map(String::new)
 				.collect(Collectors.toList());
