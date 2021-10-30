@@ -5,12 +5,12 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
 public class Negociacao {
-    private ArrayList<Operacao> operacao;
+    private List<Operacao> operacao;
     private BigDecimal irrf;
     private BigDecimal totalCompra;
     private BigDecimal totalVenda;
@@ -22,7 +22,7 @@ public class Negociacao {
 
 
     @Builder
-    public Negociacao(ArrayList<Operacao> operacao, BigDecimal irrf, BigDecimal totalCompra, BigDecimal totalVenda,
+    public Negociacao(List<Operacao> operacao, BigDecimal irrf, BigDecimal totalCompra, BigDecimal totalVenda,
                       LocalDateTime dataNegociacao, boolean teveDayTrade, BigDecimal totalComTaxas,
                       BigDecimal totalSemTaxas) {
 
@@ -41,7 +41,7 @@ public class Negociacao {
         return totalComTaxas.subtract(totalSemTaxas);
     }
 
-    private static BigDecimal calcularTotalCompra(ArrayList<Operacao> operacao){
+    private static BigDecimal calcularTotalCompra(List<Operacao> operacao){
 
         BigDecimal soma = new BigDecimal("0.0");
 
