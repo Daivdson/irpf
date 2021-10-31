@@ -5,5 +5,5 @@ import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
 import java.util.List;
 
 public interface ServicoPdfClear {
-    String notaNegociacao(String nomeArquivo);
+    List<Negociacao> notaNegociacao(String nomeArquivo);
 }

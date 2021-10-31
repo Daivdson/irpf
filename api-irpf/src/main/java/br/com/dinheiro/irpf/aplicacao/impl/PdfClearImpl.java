@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
 import br.com.dinheiro.irpf.aplicacao.dominio.PaginaPdf;
+import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
 import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,9 +34,9 @@ public class PdfClearImpl implements ServicoPdfClear {
 	}
 	
 	@Override
-	public String notaNegociacao(String nomeArquivo) {
+	public List<Negociacao> notaNegociacao(String nomeArquivo) {
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
-		List<String> operacoesPagina01 = new ArrayList<>();
+		List<String> negociacoesPagina01 = new ArrayList<>();
 
 		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
 		boolean isClientePassou = false;
