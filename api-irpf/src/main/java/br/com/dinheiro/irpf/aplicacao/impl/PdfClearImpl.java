@@ -35,6 +35,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 	
 	@Override
 	public List<Negociacao> notaNegociacao(String nomeArquivo) {
+		List<Negociacao> negociacao = new ArrayList<>();
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
 		List<String> negociacoesPagina01 = new ArrayList<>();
 
@@ -113,7 +114,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		return json;
+		return negociacao;
 	}
 
 	private String extraindoNomeDoCliente(String linha) {
