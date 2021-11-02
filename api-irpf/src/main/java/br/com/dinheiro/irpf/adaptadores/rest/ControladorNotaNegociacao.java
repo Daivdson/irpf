@@ -7,6 +7,8 @@ import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/notas")
@@ -19,10 +21,11 @@ public class ControladorNotaNegociacao {
     }
 
     @GetMapping(path = "/tes", produces = {APPLICATION_JSON_VALUE})
-    public List<Negociacao> importarNotaNegociacao(@RequestParam("arquivo") String arquivo) {
+    public List<Map<String, Object>> importarNotaNegociacao(@RequestParam("arquivo") String arquivo) {
         System.out.println(arquivo);
-
-        return servico.notaNegociacao(arquivo);
+        return servico.notaNegociacao(arquivo).stream()
+                .map(Negociacao::getDadosNegociacaoSemTratamento)
+                .collect(Collectors.toList());
     }
 
 }
