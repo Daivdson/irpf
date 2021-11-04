@@ -66,7 +66,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 
 	private NegociacaoDTO getNegociacao(List<String> linhas) {
 		NegociacaoDTO dtoNegociacao = new NegociacaoDTO();
-		List<OperacaoDto> dtoDeOperaces = new ArrayList<>();
+		List<OperacaoDto> dtoDeOperacoes = new ArrayList<>();
 
 		boolean isClientePassou = false;
 		boolean isClienteJaPreenchido = false;
@@ -77,7 +77,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 		for (String linha: linhas) {
 			// Operacoes
 			if (linha.contains(BOVESPA)) {
-				dtoDeOperaces.add(extraiOperacao(linha));
+				dtoDeOperacoes.add(getOperacao(linha));
 			}
 			// dados cliente
 			if(linha.contains(CLIENTE) && !isClientePassou && !isClienteJaPreenchido){
@@ -86,8 +86,8 @@ public class PdfClearImpl implements ServicoPdfClear {
 			}else if(isClientePassou && !isClienteJaPreenchido) {
 				isClienteJaPreenchido = true;
 				dtoNegociacao.setNomeCliente(
-						extraiNomeDoCliente(linha));
-				dtoNegociacao.setIdCliente(extraiIdDoCliente(linha));
+						getNomeDoCliente(linha));
+				dtoNegociacao.setIdCliente(getIdDoCliente(linha));
 			}
 
 			if(linha.equals(NUMERO_NOTA) && !isNumeroNotaPassou){
@@ -124,7 +124,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 				dtoNegociacao.setIrrf(getTaxaIrrf(linha));
 		}
 
-		dtoNegociacao.setOperacao(dtoDeOperaces);
+		dtoNegociacao.setOperacao(dtoDeOperacoes);
 		return dtoNegociacao;
 	}
 
@@ -143,7 +143,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 		return linhaSeparada != null ? linhaSeparada.get(0) : null;
 	}
 
-	private String extraiNomeDoCliente(String linhaComDadosDoCliente) {
+	private String getNomeDoCliente(String linhaComDadosDoCliente) {
 		List<String> linhaSeparada = getLinhaSeparada(linhaComDadosDoCliente, " ");
 		return linhaSeparada != null ?
 				linhaSeparada.stream()
@@ -152,7 +152,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 				null;
 	}
 
-	private String extraiIdDoCliente(String linhaComIdDoCliente) {
+	private String getIdDoCliente(String linhaComIdDoCliente) {
 		List<String> linhaSeparada = getLinhaSeparada(linhaComIdDoCliente, " ");
 		int posicaoQueEstaOIdCliente = 0;
 		return linhaSeparada != null ?
@@ -160,7 +160,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 				null;
 	}
 
-	private OperacaoDto extraiOperacao(String linhaComDadosDaOperacao) {
+	private OperacaoDto getOperacao(String linhaComDadosDaOperacao) {
 		// Relacao de posição do array para os dados
 		int posicaoTipoNegociacao = 0;
 		int posicaoTipoOperacao = 1;
