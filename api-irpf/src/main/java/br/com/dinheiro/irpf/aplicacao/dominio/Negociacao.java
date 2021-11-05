@@ -1,12 +1,14 @@
 package br.com.dinheiro.irpf.aplicacao.dominio;
 
+import br.com.dinheiro.irpf.aplicacao.impl.OperacaoDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 @Getter
 public class Negociacao {
@@ -19,7 +21,7 @@ public class Negociacao {
     private BigDecimal totalComTaxas;
     private BigDecimal totalSemTaxas;
     private BigDecimal totalTaxas;
-
+    private Map<String, Object> dadosNegociacaoSemTratamento;
 
     @Builder
     public Negociacao(List<Operacao> operacao, BigDecimal irrf, BigDecimal totalCompra, BigDecimal totalVenda,
@@ -35,6 +37,23 @@ public class Negociacao {
         this.totalComTaxas = totalComTaxas;
         this.totalSemTaxas = totalSemTaxas;
         this.totalTaxas = calcularTaxa(totalComTaxas,totalSemTaxas);
+    }
+
+    public Negociacao(List<OperacaoDto> operacao, String nomeCliente, String cpf, String idCliente,
+                      String dataNegociacao, String taxaLiquidacao, String emonumentos, String irrf, String numeroNota) {
+
+        Map<String, Object> negociacaojson = new HashMap<>();
+        negociacaojson.put("nomeCliente", nomeCliente);
+        negociacaojson.put("cpf", cpf);
+        negociacaojson.put("idCliente", idCliente);
+        negociacaojson.put("dataNegociacao", dataNegociacao);
+        negociacaojson.put("taxaLiquidacao", taxaLiquidacao);
+        negociacaojson.put("emonumentos", emonumentos);
+        negociacaojson.put("irrf", irrf);
+        negociacaojson.put("numeroNota", numeroNota);
+        negociacaojson.put("operacoes", operacao );
+        
+        this.dadosNegociacaoSemTratamento = negociacaojson;
     }
 
     private static BigDecimal calcularTaxa(BigDecimal totalComTaxas, BigDecimal totalSemTaxas) {
