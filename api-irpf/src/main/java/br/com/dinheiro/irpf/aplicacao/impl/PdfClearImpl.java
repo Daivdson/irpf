@@ -30,12 +30,14 @@ public class PdfClearImpl implements ServicoPdfClear {
 
 	private Pdf pdf;
 
+
+
 	public PdfClearImpl(Pdf pdf) {
 		this.pdf = pdf;
 	}
 	
 	@Override
-	public List<Negociacao> notaNegociacao(String nomeArquivo) {
+	public List<NegociacaoDTO> notaNegociacaoDto(String nomeArquivo) {
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
 		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
 
@@ -46,14 +48,14 @@ public class PdfClearImpl implements ServicoPdfClear {
 		return converterDtoNegociacoes(negociacoesDTO);
 	}
 
-	private List<Negociacao> converterDtoNegociacoes(List<NegociacaoDTO> negociacoesDTO) {
+	private List<NegociacaoDTO> converterDtoNegociacoes(List<NegociacaoDTO> negociacoesDTO) {
 		return negociacoesDTO.stream()
 				.map(this::converterDtoNegociacao)
 				.collect(Collectors.toList());
 	}
 
-	private Negociacao converterDtoNegociacao(NegociacaoDTO negociacaoDTO) {
-		return new Negociacao(negociacaoDTO.getOperacao(),
+	private NegociacaoDTO converterDtoNegociacao(NegociacaoDTO negociacaoDTO) {
+		return new NegociacaoDTO(negociacaoDTO.getOperacao(),
 				negociacaoDTO.getNomeCliente(),
 				negociacaoDTO.getCpf(),
 				negociacaoDTO.getIdCliente(),

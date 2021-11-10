@@ -4,6 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
 import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
+import br.com.dinheiro.irpf.aplicacao.impl.NegociacaoDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public class ControladorNotaNegociacao {
     @GetMapping(path = "/tes", produces = {APPLICATION_JSON_VALUE})
     public List<Map<String, Object>> importarNotaNegociacao(@RequestParam("arquivo") String arquivo) {
         System.out.println(arquivo);
-        return servico.notaNegociacao(arquivo).stream()
-                .map(Negociacao::getDadosNegociacaoSemTratamento)
+        return servico.notaNegociacaoDto(arquivo).stream()
+                .map(NegociacaoDTO::getDadosNegociacaoSemTratamento)
                 .collect(Collectors.toList());
     }
 

@@ -14,19 +14,15 @@ public class Operacao {
 	private BigDecimal valorOperacao;
 	private String tipoOperacao;
 	private Acao acao;
-	private String observacao;
-	private LocalDateTime data;
 	
 	@Builder
-	public Operacao(String tipoNegociacao, int quantidade, BigDecimal precoAcao, BigDecimal valorOperacao, String tipoOperacao, Acao acao, String observacao, LocalDateTime data) {
+	public Operacao(String tipoNegociacao, int quantidade, BigDecimal precoAcao, BigDecimal valorOperacao, String tipoOperacao, Acao acao) {
 		this.tipoNegociacao = tipoNegociacao;
 		this.quantidade = quantidade;
 		this.precoAcao = precoAcao;
 		this.valorOperacao = valorOperacao;
 		this.tipoOperacao = tipoOperacao;
 		this.acao = acao;
-		this.observacao = observacao;
-		this.data = data;
 	}
 	
 
