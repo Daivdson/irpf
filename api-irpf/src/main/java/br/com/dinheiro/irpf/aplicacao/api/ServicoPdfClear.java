@@ -7,5 +7,5 @@ import br.com.dinheiro.irpf.aplicacao.impl.NegociacaoDTO;
 import java.util.List;
 
 public interface ServicoPdfClear {
-    List<NegociacaoDTO> notaNegociacaoDto(String nomeArquivo);
+    List<Negociacao> notaNegociacao(String nomeArquivo);
 }

@@ -5,10 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 public class Negociacao {
@@ -16,45 +17,47 @@ public class Negociacao {
     private BigDecimal irrf;
     private BigDecimal totalCompra;
     private BigDecimal totalVenda;
-    private LocalDateTime dataNegociacao;
+    private Date dataNegociacao;
     private boolean teveDayTrade;
-    private BigDecimal totalComTaxas;
-    private BigDecimal totalSemTaxas;
-    private BigDecimal totalTaxas;
+    //private BigDecimal totalComTaxas; -> É necessário que o DTO colha esta informação da nota.
+    //private BigDecimal totalSemTaxas; -> É necessário que o DTO colha esta informação da nota.
+    //private BigDecimal totalTaxas;
 
 
     @Builder
-    public Negociacao(List<Operacao> operacao, BigDecimal irrf, BigDecimal totalCompra, BigDecimal totalVenda,
-                      LocalDateTime dataNegociacao, boolean teveDayTrade, BigDecimal totalComTaxas,
-                      BigDecimal totalSemTaxas) {
+    public Negociacao(List<Operacao> operacao, BigDecimal irrf,
+                      Date dataNegociacao, boolean teveDayTrade) {
 
         this.operacao = operacao;
         this.irrf = irrf;
-        this.totalCompra = totalCompra;
-        this.totalVenda = totalVenda;
+        this.totalCompra = calcularTotalCompra(operacao);
+        this.totalVenda = calcularTotalVenda(operacao);
         this.dataNegociacao = dataNegociacao;
         this.teveDayTrade = teveDayTrade;
-        this.totalComTaxas = totalComTaxas;
-        this.totalSemTaxas = totalSemTaxas;
-        this.totalTaxas = calcularTaxa(totalComTaxas,totalSemTaxas);
+        //this.totalComTaxas = totalComTaxas;
+        //this.totalSemTaxas = totalSemTaxas;
+        //this.totalTaxas = calcularTaxa(totalComTaxas,totalSemTaxas);
     }
 
+    //Este método somente será aplicado quando o DTO colher os dados do total da nota
    private static BigDecimal calcularTaxa(BigDecimal totalComTaxas, BigDecimal totalSemTaxas) {
         return totalComTaxas.subtract(totalSemTaxas);
     }
 
     private static BigDecimal calcularTotalCompra(List<Operacao> operacao){
 
-        BigDecimal soma = new BigDecimal("0.0");
+        BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao().equalsIgnoreCase("C"))
+                .map(valor -> valor.getValorOperacao()).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return soma;
 
-        for(Operacao o : operacao) {
-            if (o != null) {
-                if (o.getTipoOperacao().equalsIgnoreCase("C")) {
-                    soma.add(o.getValorOperacao());
-                }
-            }
-        }
+    }
+    private static BigDecimal calcularTotalVenda(List<Operacao> operacao){
+
+        BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao().equalsIgnoreCase("V"))
+                .map(valor -> valor.getValorOperacao()).reduce(BigDecimal.ZERO, BigDecimal::add);
         return soma;
     }
+
+
 }
 

@@ -22,7 +22,7 @@ public class NegociacaoDTO {
     private Map<String, Object> dadosNegociacaoSemTratamento;
 
 
-    /*public NegociacaoDTO(List<OperacaoDto> operacao, String nomeCliente, String cpf, String idCliente,
+    public NegociacaoDTO(List<OperacaoDto> operacao, String nomeCliente, String cpf, String idCliente,
                          String dataNegociacao, String taxaLiquidacao, String emonumentos, String irrf, String numeroNota) {
 
         this.operacao = operacao;
@@ -35,10 +35,10 @@ public class NegociacaoDTO {
         this.irrf = irrf;
         this.numeroNota = numeroNota;
 
-    }*/
+    }
 
 
-    public NegociacaoDTO(List<OperacaoDto> operacao, String nomeCliente, String cpf, String idCliente,
+    /*public NegociacaoDTO(List<OperacaoDto> operacao, String nomeCliente, String cpf, String idCliente,
                          String dataNegociacao, String taxaLiquidacao, String emonumentos, String irrf, String numeroNota) {
 
         Map<String, Object> negociacaojson = new HashMap<>();
@@ -53,7 +53,7 @@ public class NegociacaoDTO {
         negociacaojson.put("operacoes", operacao);
 
         this.dadosNegociacaoSemTratamento = negociacaojson;
-    }
+    }*/
 }
 
 

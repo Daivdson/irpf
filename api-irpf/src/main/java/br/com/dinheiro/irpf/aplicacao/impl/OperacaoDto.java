@@ -16,5 +16,6 @@ public class OperacaoDto {
     private String quantidade;
     private String preco;
     private String valorOperacao;
+    private String tipoAcao;
 
 }

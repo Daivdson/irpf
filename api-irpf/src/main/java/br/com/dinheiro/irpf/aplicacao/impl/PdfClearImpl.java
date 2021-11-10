@@ -30,25 +30,24 @@ public class PdfClearImpl implements ServicoPdfClear {
 
 	private Pdf pdf;
 
-
-
 	public PdfClearImpl(Pdf pdf) {
 		this.pdf = pdf;
 	}
 	
 	@Override
-	public List<NegociacaoDTO> notaNegociacaoDto(String nomeArquivo) {
+	public List<Negociacao> notaNegociacao(String nomeArquivo) {
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
 		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
+		Conversor conversor = new Conversor();
 
 		for (PaginaPdf pagina: paginas) {
 			negociacoesDTO.add(getNegociacao(pagina.getLinhas()));
 		}
 
-		return converterDtoNegociacoes(negociacoesDTO);
+		return conversor.converterDtoNegociacoes(negociacoesDTO);
 	}
 
-	private List<NegociacaoDTO> converterDtoNegociacoes(List<NegociacaoDTO> negociacoesDTO) {
+	/*private List<NegociacaoDTO> converterDtoNegociacoes(List<NegociacaoDTO> negociacoesDTO) {
 		return negociacoesDTO.stream()
 				.map(this::converterDtoNegociacao)
 				.collect(Collectors.toList());
@@ -64,7 +63,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 				negociacaoDTO.getEmonumentos(),
 				negociacaoDTO.getIrrf(),
 				negociacaoDTO.getNumeroNota());
-	}
+	}*/
 
 	private NegociacaoDTO getNegociacao(List<String> linhas) {
 		NegociacaoDTO dtoNegociacao = new NegociacaoDTO();
@@ -168,6 +167,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 		int posicaoTipoOperacao = 1;
 		int posicaoTipoMercado = 2;
 		int posicaoAtivo = 3;
+		int posicaoTipoAcao = 13;
 
 		List<String> linhaOperacaoSeparada = getLinhaSeparada(linhaComDadosDaOperacao, " ");
 
@@ -176,6 +176,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 				.tipoNegociacao(linhaOperacaoSeparada.get(posicaoTipoNegociacao))
 				.tipoMercado(linhaOperacaoSeparada.get(posicaoTipoMercado))
 				.ativo(linhaOperacaoSeparada.get(posicaoAtivo))
+				.tipoAcao(linhaOperacaoSeparada.get(posicaoTipoAcao))
 				.build();
 
 		setValoresQuantidadePrecoValorOperacao(operacaoDto, linhaOperacaoSeparada.stream()
