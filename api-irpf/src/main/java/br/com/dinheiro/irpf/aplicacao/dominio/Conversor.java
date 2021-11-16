@@ -1,10 +1,7 @@
-package br.com.dinheiro.irpf.aplicacao.impl;
+package br.com.dinheiro.irpf.aplicacao.dominio;
 
-
-import br.com.dinheiro.irpf.aplicacao.dominio.Acao;
-import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
-import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
 import br.com.dinheiro.irpf.aplicacao.impl.NegociacaoDTO;
+import br.com.dinheiro.irpf.aplicacao.impl.OperacaoDto;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -15,20 +12,20 @@ import java.util.stream.Collectors;
 
 public class Conversor {
 
-    public Conversor() {
-    }
-
     public List<Negociacao> converterDtoNegociacoes(List<NegociacaoDTO> negociacoesDTO) {
 
         return negociacoesDTO.stream()
-                .map((this::converterDtoNegociacao))
+                .map(this::converterDtoNegociacao)
                 .collect(Collectors.toList());
     }
 
     public  Negociacao converterDtoNegociacao(NegociacaoDTO negociacaoDTO){
-        Negociacao negociacao = new Negociacao(converterDtoOperacoes(negociacaoDTO.getOperacao()),
-                converterStringParaBigDecimal(negociacaoDTO.getIrrf()), formatarData(negociacaoDTO.getDataNegociacao()),
-                verificarSeTeveDayTrade(converterDtoOperacoes(negociacaoDTO.getOperacao())));
+        Negociacao negociacao = new Negociacao(
+                converterDtoOperacoes(negociacaoDTO.getOperacao()),
+                converterStringParaBigDecimal(negociacaoDTO.getIrrf()),
+                formatarData(negociacaoDTO.getDataNegociacao()),
+                converterStringParaBigDecimal(negociacaoDTO.getEmolumentos()),
+                converterStringParaBigDecimal(negociacaoDTO.getTaxaLiquidacao()));
 
         return negociacao;
     }
@@ -46,7 +43,7 @@ public class Conversor {
                 converterStringParaInt(operacaoDto.getQuantidade()),
                 converterStringParaBigDecimal(operacaoDto.getPreco()),
                 converterStringParaBigDecimal(operacaoDto.getValorOperacao()),
-                operacaoDto.getTipoOperacao(),
+                obterTipoOperacao(operacaoDto.getTipoOperacao()),
                 converterDtoAcao(operacaoDto));
         return operacao;
     }
@@ -58,12 +55,22 @@ public class Conversor {
     }
 
     private BigDecimal converterStringParaBigDecimal(String entrada){
-        BigDecimal saida = new BigDecimal(entrada);
-        return saida;
+        //TODO verificar se notas de corretagem acima de 1000 reais aparece ponto
+        String numeroComPonto = entrada.replaceAll(",",".");
+
+        return new BigDecimal(numeroComPonto);
     }
 
     private Integer converterStringParaInt(String entrada){
         return Integer.parseInt(entrada);
+    }
+
+    private char obterTipoOperacao(String entrada){
+        char saida = entrada.charAt(0);
+        if(saida == TipoOperacao.COMPRA.getOperacao()){
+            return TipoOperacao.COMPRA.getOperacao();
+        }
+        return TipoOperacao.VENDA.getOperacao();
     }
 
     private Date formatarData(String dataRecebida){
@@ -76,19 +83,6 @@ public class Conversor {
         }
         return data;
     }
-
-    private Boolean verificarSeTeveDayTrade(List<Operacao> operacoes) {
-
-        for(Operacao operacao : operacoes){
-            for(Operacao operacaoAVerificar : operacoes){
-
-                if(operacao.getAcao().equals(operacaoAVerificar.getAcao()) &&
-                        !operacao.getTipoOperacao().equals(operacaoAVerificar.getTipoOperacao())){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }
+
+

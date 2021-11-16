@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
+import br.com.dinheiro.irpf.aplicacao.dominio.Conversor;
 import br.com.dinheiro.irpf.aplicacao.dominio.PaginaPdf;
 import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
 import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
@@ -23,47 +24,30 @@ public class PdfClearImpl implements ServicoPdfClear {
 	private final static String TAXA_LIQUIDA = "Taxa de liquidação";
 	private final static String VALOR_LIQUIDO_PARA = "Líquido para";
 	private final static String CPF_CLIENTE = "Conta corrente Acionista Administrador";
-	private final static String EMONUMENTOS = "Emolumentos";
+	private final static String EMOLUMENTOS = "Emolumentos";
 	private final static String TAXA_IRRF = "I.R.R.F.";
 	private static final String REGEX_SE_POSSUI_NUEMRO = ".*\\d.*";
 	private static final String REGEX_SE_SO_POSSUI_NUEMRO = "^\\d";
 
 	private Pdf pdf;
+	private Conversor conversor;
 
 	public PdfClearImpl(Pdf pdf) {
 		this.pdf = pdf;
+		conversor = new Conversor();
 	}
 	
 	@Override
 	public List<Negociacao> notaNegociacao(String nomeArquivo) {
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
 		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
-		Conversor conversor = new Conversor();
 
-		for (PaginaPdf pagina: paginas) {
-			negociacoesDTO.add(getNegociacao(pagina.getLinhas()));
-		}
+		paginas.stream().forEach(pagina -> negociacoesDTO.
+				add(getNegociacao(pagina.getLinhas())));
 
 		return conversor.converterDtoNegociacoes(negociacoesDTO);
 	}
 
-	/*private List<NegociacaoDTO> converterDtoNegociacoes(List<NegociacaoDTO> negociacoesDTO) {
-		return negociacoesDTO.stream()
-				.map(this::converterDtoNegociacao)
-				.collect(Collectors.toList());
-	}
-
-	private NegociacaoDTO converterDtoNegociacao(NegociacaoDTO negociacaoDTO) {
-		return new NegociacaoDTO(negociacaoDTO.getOperacao(),
-				negociacaoDTO.getNomeCliente(),
-				negociacaoDTO.getCpf(),
-				negociacaoDTO.getIdCliente(),
-				negociacaoDTO.getDataNegociacao(),
-				negociacaoDTO.getTaxaLiquidacao(),
-				negociacaoDTO.getEmonumentos(),
-				negociacaoDTO.getIrrf(),
-				negociacaoDTO.getNumeroNota());
-	}*/
 
 	private NegociacaoDTO getNegociacao(List<String> linhas) {
 		NegociacaoDTO dtoNegociacao = new NegociacaoDTO();
@@ -118,8 +102,8 @@ public class PdfClearImpl implements ServicoPdfClear {
 			if(linha.contains(TAXA_LIQUIDA))
 				dtoNegociacao.setTaxaLiquidacao(getTaxaLiquida(linha));
 
-			if(linha.contains(EMONUMENTOS))
-				dtoNegociacao.setEmonumentos(getEmonumentos(linha));
+			if(linha.contains(EMOLUMENTOS))
+				dtoNegociacao.setEmolumentos(getEmolumentos(linha));
 
 			if(linha.contains(TAXA_IRRF))
 				dtoNegociacao.setIrrf(getTaxaIrrf(linha));
@@ -134,8 +118,8 @@ public class PdfClearImpl implements ServicoPdfClear {
 		return linhaSeparada != null ? linhaSeparada.get(0) : null;
 	}
 
-	private String getEmonumentos(String linhaDeEmonumentos) {
-		List<String> linhaSeparada = getLinhaSeparada(linhaDeEmonumentos, EMONUMENTOS);
+	private String getEmolumentos(String linhaDeEmolumentos) {
+		List<String> linhaSeparada = getLinhaSeparada(linhaDeEmolumentos, EMOLUMENTOS);
 		return linhaSeparada != null ? linhaSeparada.get(0) : null;
 	}
 

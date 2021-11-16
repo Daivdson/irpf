@@ -1,14 +1,11 @@
 package br.com.dinheiro.irpf.aplicacao.dominio;
 
-import br.com.dinheiro.irpf.aplicacao.impl.OperacaoDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -19,43 +16,53 @@ public class Negociacao {
     private BigDecimal totalVenda;
     private Date dataNegociacao;
     private boolean teveDayTrade;
-    //private BigDecimal totalComTaxas; -> É necessário que o DTO colha esta informação da nota.
-    //private BigDecimal totalSemTaxas; -> É necessário que o DTO colha esta informação da nota.
-    //private BigDecimal totalTaxas;
-
+    private BigDecimal emolumentos;
+    private BigDecimal taxaLiquidacao;
+    //NegociacaoDto ainda não está colhendo as informações abaixo
+    //Apenas a taxa de liquidação e emolumentos
+    //private BigDecimal totalComTaxas;
+    //private BigDecimal totalSemTaxas;
 
     @Builder
     public Negociacao(List<Operacao> operacao, BigDecimal irrf,
-                      Date dataNegociacao, boolean teveDayTrade) {
+                      Date dataNegociacao, BigDecimal emolumentos, BigDecimal taxaLiquidacao) {
 
         this.operacao = operacao;
         this.irrf = irrf;
         this.totalCompra = calcularTotalCompra(operacao);
         this.totalVenda = calcularTotalVenda(operacao);
         this.dataNegociacao = dataNegociacao;
-        this.teveDayTrade = teveDayTrade;
+        this.teveDayTrade = verificarSeTeveDayTrade(operacao);
+        this.emolumentos = emolumentos;
+        this.taxaLiquidacao = taxaLiquidacao;
         //this.totalComTaxas = totalComTaxas;
         //this.totalSemTaxas = totalSemTaxas;
-        //this.totalTaxas = calcularTaxa(totalComTaxas,totalSemTaxas);
     }
 
-    //Este método somente será aplicado quando o DTO colher os dados do total da nota
-   private static BigDecimal calcularTaxa(BigDecimal totalComTaxas, BigDecimal totalSemTaxas) {
-        return totalComTaxas.subtract(totalSemTaxas);
-    }
+    private BigDecimal calcularTotalCompra(List<Operacao> operacao){
 
-    private static BigDecimal calcularTotalCompra(List<Operacao> operacao){
-
-        BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao().equalsIgnoreCase("C"))
+        BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao() == TipoOperacao.COMPRA.getOperacao())
                 .map(valor -> valor.getValorOperacao()).reduce(BigDecimal.ZERO, BigDecimal::add);
         return soma;
 
     }
-    private static BigDecimal calcularTotalVenda(List<Operacao> operacao){
+    private BigDecimal calcularTotalVenda(List<Operacao> operacao){
 
-        BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao().equalsIgnoreCase("V"))
+        BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao() == TipoOperacao.VENDA.getOperacao())
                 .map(valor -> valor.getValorOperacao()).reduce(BigDecimal.ZERO, BigDecimal::add);
         return soma;
+    }
+
+    private boolean verificarSeTeveDayTrade(List<Operacao> operacoes){
+        List<Operacao> operacoesCompra = operacoes.stream().
+                filter(operacao -> operacao.getTipoOperacao() == TipoOperacao.COMPRA.getOperacao()).collect(Collectors.toList());
+        List<Operacao> operacoesVenda = operacoes.stream().
+                filter(operacao -> operacao.getTipoOperacao() == TipoOperacao.VENDA.getOperacao()).collect(Collectors.toList());
+
+        return operacoesCompra.stream().
+                anyMatch(opCompra -> operacoesVenda.stream().
+                        anyMatch(opVenda -> opVenda.getAcao().getNome().
+                                equals(opCompra.getAcao().getNome())));
     }
 
 
