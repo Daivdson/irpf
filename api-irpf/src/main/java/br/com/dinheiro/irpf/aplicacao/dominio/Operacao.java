@@ -12,11 +12,11 @@ public class Operacao {
 	private int quantidade;
 	private BigDecimal precoAcao;
 	private BigDecimal valorOperacao;
-	private char tipoOperacao;
+	private TipoOperacao tipoOperacao;
 	private Acao acao;
 	
 	@Builder
-	public Operacao(String tipoNegociacao, int quantidade, BigDecimal precoAcao, BigDecimal valorOperacao, char tipoOperacao, Acao acao) {
+	public Operacao(String tipoNegociacao, int quantidade, BigDecimal precoAcao, BigDecimal valorOperacao, TipoOperacao tipoOperacao, Acao acao) {
 		this.tipoNegociacao = tipoNegociacao;
 		this.quantidade = quantidade;
 		this.precoAcao = precoAcao;

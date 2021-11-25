@@ -1,4 +1,4 @@
-package br.com.dinheiro.irpf.aplicacao.impl;
+package br.com.dinheiro.irpf.aplicacao.impl.dto;
 
 import lombok.Builder;
 import lombok.Data;

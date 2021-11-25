@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
-import br.com.dinheiro.irpf.aplicacao.dominio.Conversor;
 import br.com.dinheiro.irpf.aplicacao.dominio.PaginaPdf;
 import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
+import br.com.dinheiro.irpf.aplicacao.impl.dto.NegociacaoDTO;
+import br.com.dinheiro.irpf.aplicacao.impl.dto.OperacaoDto;
 import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
 import static br.com.dinheiro.irpf.util.Util.getLinhaSeparada;
 
@@ -34,7 +35,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 
 	public PdfClearImpl(Pdf pdf) {
 		this.pdf = pdf;
-		conversor = new Conversor();
+		this.conversor = new Conversor();
 	}
 	
 	@Override
@@ -47,7 +48,6 @@ public class PdfClearImpl implements ServicoPdfClear {
 
 		return conversor.converterDtoNegociacoes(negociacoesDTO);
 	}
-
 
 	private NegociacaoDTO getNegociacao(List<String> linhas) {
 		NegociacaoDTO dtoNegociacao = new NegociacaoDTO();

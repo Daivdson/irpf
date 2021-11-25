@@ -3,7 +3,6 @@ package br.com.dinheiro.irpf.adaptadores.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
-import br.com.dinheiro.irpf.aplicacao.impl.ConversorDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

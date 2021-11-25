@@ -1,4 +1,4 @@
-package br.com.dinheiro.irpf.aplicacao.impl;
+package br.com.dinheiro.irpf.adaptadores.rest;
 
 import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
 
