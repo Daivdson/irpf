@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import br.com.dinheiro.irpf.aplicacao.api.ServicoPdfClear;
 import br.com.dinheiro.irpf.aplicacao.dominio.PaginaPdf;
 import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
+import br.com.dinheiro.irpf.aplicacao.impl.dto.NegociacaoDTO;
+import br.com.dinheiro.irpf.aplicacao.impl.dto.OperacaoDto;
 import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
 import static br.com.dinheiro.irpf.util.Util.getLinhaSeparada;
 
@@ -23,15 +25,17 @@ public class PdfClearImpl implements ServicoPdfClear {
 	private final static String TAXA_LIQUIDA = "Taxa de liquidação";
 	private final static String VALOR_LIQUIDO_PARA = "Líquido para";
 	private final static String CPF_CLIENTE = "Conta corrente Acionista Administrador";
-	private final static String EMONUMENTOS = "Emolumentos";
+	private final static String EMOLUMENTOS = "Emolumentos";
 	private final static String TAXA_IRRF = "I.R.R.F.";
 	private static final String REGEX_SE_POSSUI_NUEMRO = ".*\\d.*";
 	private static final String REGEX_SE_SO_POSSUI_NUEMRO = "^\\d";
 
 	private Pdf pdf;
+	private Conversor conversor;
 
 	public PdfClearImpl(Pdf pdf) {
 		this.pdf = pdf;
+		this.conversor = new Conversor();
 	}
 	
 	@Override
@@ -39,29 +43,10 @@ public class PdfClearImpl implements ServicoPdfClear {
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
 		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
 
-		for (PaginaPdf pagina: paginas) {
-			negociacoesDTO.add(getNegociacao(pagina.getLinhas()));
-		}
+		paginas.stream().forEach(pagina -> negociacoesDTO.
+				add(getNegociacao(pagina.getLinhas())));
 
-		return converterDtoNegociacoes(negociacoesDTO);
-	}
-
-	private List<Negociacao> converterDtoNegociacoes(List<NegociacaoDTO> negociacoesDTO) {
-		return negociacoesDTO.stream()
-				.map(this::converterDtoNegociacao)
-				.collect(Collectors.toList());
-	}
-
-	private Negociacao converterDtoNegociacao(NegociacaoDTO negociacaoDTO) {
-		return new Negociacao(negociacaoDTO.getOperacao(),
-				negociacaoDTO.getNomeCliente(),
-				negociacaoDTO.getCpf(),
-				negociacaoDTO.getIdCliente(),
-				negociacaoDTO.getDataNegociacao(),
-				negociacaoDTO.getTaxaLiquidacao(),
-				negociacaoDTO.getEmonumentos(),
-				negociacaoDTO.getIrrf(),
-				negociacaoDTO.getNumeroNota());
+		return conversor.converterDtoNegociacoes(negociacoesDTO);
 	}
 
 	private NegociacaoDTO getNegociacao(List<String> linhas) {
@@ -117,8 +102,8 @@ public class PdfClearImpl implements ServicoPdfClear {
 			if(linha.contains(TAXA_LIQUIDA))
 				dtoNegociacao.setTaxaLiquidacao(getTaxaLiquida(linha));
 
-			if(linha.contains(EMONUMENTOS))
-				dtoNegociacao.setEmonumentos(getEmonumentos(linha));
+			if(linha.contains(EMOLUMENTOS))
+				dtoNegociacao.setEmolumentos(getEmolumentos(linha));
 
 			if(linha.contains(TAXA_IRRF))
 				dtoNegociacao.setIrrf(getTaxaIrrf(linha));
@@ -133,8 +118,8 @@ public class PdfClearImpl implements ServicoPdfClear {
 		return linhaSeparada != null ? linhaSeparada.get(0) : null;
 	}
 
-	private String getEmonumentos(String linhaDeEmonumentos) {
-		List<String> linhaSeparada = getLinhaSeparada(linhaDeEmonumentos, EMONUMENTOS);
+	private String getEmolumentos(String linhaDeEmolumentos) {
+		List<String> linhaSeparada = getLinhaSeparada(linhaDeEmolumentos, EMOLUMENTOS);
 		return linhaSeparada != null ? linhaSeparada.get(0) : null;
 	}
 
@@ -166,6 +151,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 		int posicaoTipoOperacao = 1;
 		int posicaoTipoMercado = 2;
 		int posicaoAtivo = 3;
+		int posicaoTipoAcao = 13;
 
 		List<String> linhaOperacaoSeparada = getLinhaSeparada(linhaComDadosDaOperacao, " ");
 
@@ -174,6 +160,7 @@ public class PdfClearImpl implements ServicoPdfClear {
 				.tipoNegociacao(linhaOperacaoSeparada.get(posicaoTipoNegociacao))
 				.tipoMercado(linhaOperacaoSeparada.get(posicaoTipoMercado))
 				.ativo(linhaOperacaoSeparada.get(posicaoAtivo))
+				.tipoAcao(linhaOperacaoSeparada.get(posicaoTipoAcao))
 				.build();
 
 		setValoresQuantidadePrecoValorOperacao(operacaoDto, linhaOperacaoSeparada.stream()
