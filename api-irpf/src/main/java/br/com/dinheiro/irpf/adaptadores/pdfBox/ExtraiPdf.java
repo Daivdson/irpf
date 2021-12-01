@@ -1,5 +1,6 @@
 package br.com.dinheiro.irpf.adaptadores.pdfBox;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +17,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.google.common.collect.Lists;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 public class ExtraiPdf implements Pdf{
@@ -43,6 +45,28 @@ public class ExtraiPdf implements Pdf{
 		PDDocument arquivoExtraido = null;
 		try {
 			InputStream arquivo = new FileInputStream(getCaminhoArquivo(nomeArquivo));
+
+			arquivoExtraido = getPDDocument(arquivo);
+
+			return extraiPaginasElinhasDoArquivo(arquivoExtraido);
+		} catch (IOException e) {
+			throw new RuntimeException("Não foi possível extrair linhas do PDF", e);
+		}finally {
+			if (arquivoExtraido != null) {
+				try {
+					arquivoExtraido.close();
+				} catch (IOException e) {
+					log.error("Não foi possível fazer o close() do PDDocument");
+				}
+			}
+		}
+	}
+
+	@Override
+	public List<PaginaPdf> extraiPaginasPdf(MultipartFile arquivoFile) {
+		PDDocument arquivoExtraido = null;
+		try {
+			InputStream arquivo = new ByteArrayInputStream(arquivoFile.getBytes());
 
 			arquivoExtraido = getPDDocument(arquivo);
 

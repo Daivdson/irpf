@@ -13,6 +13,7 @@ import br.com.dinheiro.irpf.aplicacao.repositorio.Pdf;
 import static br.com.dinheiro.irpf.util.Util.getLinhaSeparada;
 
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 public class PdfClearImpl implements ServicoPdfClear {
 
@@ -41,6 +42,17 @@ public class PdfClearImpl implements ServicoPdfClear {
 	@Override
 	public List<Negociacao> notaNegociacao(String nomeArquivo) {
 		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
+		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
+
+		paginas.stream().forEach(pagina -> negociacoesDTO.
+				add(getNegociacao(pagina.getLinhas())));
+
+		return conversor.converterDtoNegociacoes(negociacoesDTO);
+	}
+
+	@Override
+	public List<Negociacao> notaNegociacao(MultipartFile arquivo) {
+		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(arquivo);
 		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
 
 		paginas.stream().forEach(pagina -> negociacoesDTO.
