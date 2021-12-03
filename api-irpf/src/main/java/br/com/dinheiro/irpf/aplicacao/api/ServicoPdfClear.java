@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ServicoPdfClear {
-    List<Negociacao> notaNegociacao(String nomeArquivo);
 
     List<Negociacao> notaNegociacao(MultipartFile arquivo);
 }

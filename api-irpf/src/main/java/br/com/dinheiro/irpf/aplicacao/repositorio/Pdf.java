@@ -6,7 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface Pdf {
-    List<PaginaPdf> extraiPaginasPdf(String nomeArquivo);
     List<PaginaPdf> extraiPaginasPdf(MultipartFile arquivoFile);
-
 }

@@ -38,17 +38,6 @@ public class PdfClearImpl implements ServicoPdfClear {
 		this.pdf = pdf;
 		this.conversor = new Conversor();
 	}
-	
-	@Override
-	public List<Negociacao> notaNegociacao(String nomeArquivo) {
-		List<PaginaPdf> paginas = pdf.extraiPaginasPdf(nomeArquivo);
-		List<NegociacaoDTO> negociacoesDTO = new ArrayList<>();
-
-		paginas.stream().forEach(pagina -> negociacoesDTO.
-				add(getNegociacao(pagina.getLinhas())));
-
-		return conversor.converterDtoNegociacoes(negociacoesDTO);
-	}
 
 	@Override
 	public List<Negociacao> notaNegociacao(MultipartFile arquivo) {
