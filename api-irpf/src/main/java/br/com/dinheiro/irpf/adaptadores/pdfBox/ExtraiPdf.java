@@ -1,6 +1,6 @@
 package br.com.dinheiro.irpf.adaptadores.pdfBox;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -14,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import com.google.common.collect.Lists;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 public class ExtraiPdf implements Pdf{
@@ -39,10 +39,10 @@ public class ExtraiPdf implements Pdf{
 	}
 
 	@Override
-	public List<PaginaPdf> extraiPaginasPdf(String nomeArquivo) {
+	public List<PaginaPdf> extraiPaginasPdf(MultipartFile arquivoFile) {
 		PDDocument arquivoExtraido = null;
 		try {
-			InputStream arquivo = new FileInputStream(getCaminhoArquivo(nomeArquivo));
+			InputStream arquivo = new ByteArrayInputStream(arquivoFile.getBytes());
 
 			arquivoExtraido = getPDDocument(arquivo);
 
