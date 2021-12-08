@@ -33,4 +33,8 @@ public class Util {
     public static BigDecimal somaBigDecimal(BigDecimal ... valor) {
         return Arrays.stream(valor).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public static BigDecimal somaBigDecimal(List<BigDecimal> valor) {
+        return valor.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }
