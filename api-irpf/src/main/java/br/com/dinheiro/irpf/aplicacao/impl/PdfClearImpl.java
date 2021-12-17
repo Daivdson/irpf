@@ -17,19 +17,29 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class PdfClearImpl implements ServicoPdfClear {
 
+	private static final String REGEX_SE_POSSUI_NUEMRO = ".*\\d.*";
+	private static final String REGEX_SE_SO_POSSUI_NUEMRO = "^\\d";
+
 	private final static String BOVESPA = "1-BOVESPA";
 	private final static String DATA_PREGAO = "Data pregão";
 	private final static String NUMERO_NOTA = "Nr. nota";
 	private final static String CLIENTE = "Cliente";
 	private final static String TOTAL_CBLC = "Total CBLC";
 	private final static String VALOR_LIQUIDO_DAS_OPERACOES = "Valor líquido das operações";
-	private final static String TAXA_LIQUIDA = "Taxa de liquidação";
 	private final static String VALOR_LIQUIDO_PARA = "Líquido para";
 	private final static String CPF_CLIENTE = "Conta corrente Acionista Administrador";
+
+	private final static String TAXA_REGISTRO = "Taxa de Registro";
+	private final static String TAXA_LIQUIDA = "Taxa de liquidação";
+	private final static String TAXA_TEMPO_OPERACAO = "Taxa de termo/opções";
+	private final static String TAXA_ANA = "Taxa A.N.A.";
 	private final static String EMOLUMENTOS = "Emolumentos";
+	private final static String TAXA_OPERACIONAL = "Taxa Operacional";
+	private final static String TAXA_EXECUCAO = "Execução";
+	private final static String TAXA_CUSTODIA = "Taxa de Custódia";
+	private final static String TAXA_IMPOSTOS = "Impostos";
 	private final static String TAXA_IRRF = "I.R.R.F.";
-	private static final String REGEX_SE_POSSUI_NUEMRO = ".*\\d.*";
-	private static final String REGEX_SE_SO_POSSUI_NUEMRO = "^\\d";
+	private final static String TAXA_OUTRAS = "Outros";
 
 	private Pdf pdf;
 	private Conversor conversor;
@@ -101,31 +111,45 @@ public class PdfClearImpl implements ServicoPdfClear {
 			}
 
 			if(linha.contains(TAXA_LIQUIDA))
-				dtoNegociacao.setTaxaLiquidacao(getTaxaLiquida(linha));
+				dtoNegociacao.setTaxaLiquidacao(getTaxa(linha, TAXA_LIQUIDA));
+
+			if(linha.contains(TAXA_REGISTRO))
+				dtoNegociacao.setTaxaRegistro(getTaxa(linha, TAXA_REGISTRO));
+
+			if(linha.contains(TAXA_TEMPO_OPERACAO))
+				dtoNegociacao.setTaxaTempoOperacao(getTaxa(linha, TAXA_TEMPO_OPERACAO));
+
+			if(linha.contains(TAXA_ANA))
+				dtoNegociacao.setTaxaANA(getTaxa(linha, TAXA_ANA));
 
 			if(linha.contains(EMOLUMENTOS))
-				dtoNegociacao.setEmolumentos(getEmolumentos(linha));
+				dtoNegociacao.setEmolumentos(getTaxa(linha, EMOLUMENTOS));
+
+			if(linha.contains(TAXA_OPERACIONAL))
+				dtoNegociacao.setTaxaOperacional(getTaxa(linha, TAXA_OPERACIONAL));
+
+			if(linha.contains(TAXA_EXECUCAO))
+				dtoNegociacao.setTaxaExecucao(getTaxa(linha, TAXA_EXECUCAO));
+
+			if(linha.contains(TAXA_CUSTODIA))
+				dtoNegociacao.setTaxaCustodia(getTaxa(linha, TAXA_CUSTODIA));
+
+			if(linha.contains(TAXA_IMPOSTOS))
+				dtoNegociacao.setImpostos(getTaxa(linha, TAXA_IMPOSTOS));
 
 			if(linha.contains(TAXA_IRRF))
-				dtoNegociacao.setIrrf(getTaxaIrrf(linha));
+				dtoNegociacao.setIrrf(getTaxa(linha, TAXA_IRRF));
+
+			if(linha.contains(TAXA_OUTRAS))
+				dtoNegociacao.setOutrasTaxas(getTaxa(linha, TAXA_OUTRAS));
 		}
 
 		dtoNegociacao.setOperacao(dtoDeOperacoes);
 		return dtoNegociacao;
 	}
-
-	private String getTaxaLiquida(String linhaDaTaxaLiquida) {
-		List<String> linhaSeparada = getLinhaSeparada(linhaDaTaxaLiquida, TAXA_LIQUIDA);
-		return linhaSeparada != null ? linhaSeparada.get(0) : null;
-	}
-
-	private String getEmolumentos(String linhaDeEmolumentos) {
-		List<String> linhaSeparada = getLinhaSeparada(linhaDeEmolumentos, EMOLUMENTOS);
-		return linhaSeparada != null ? linhaSeparada.get(0) : null;
-	}
-
-	private String getTaxaIrrf(String linhaIrrf) {
-		List<String> linhaSeparada = getLinhaSeparada(linhaIrrf, TAXA_IRRF);
+	
+	private String getTaxa(String linhaDaTaxa, String taxa) {
+		List<String> linhaSeparada = getLinhaSeparada(linhaDaTaxa, taxa);
 		return linhaSeparada != null ? linhaSeparada.get(0) : null;
 	}
 

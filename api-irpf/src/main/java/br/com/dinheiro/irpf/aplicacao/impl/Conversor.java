@@ -1,17 +1,11 @@
 package br.com.dinheiro.irpf.aplicacao.impl;
 
-import br.com.dinheiro.irpf.aplicacao.dominio.Acao;
-import br.com.dinheiro.irpf.aplicacao.dominio.Negociacao;
-import br.com.dinheiro.irpf.aplicacao.dominio.Operacao;
-import br.com.dinheiro.irpf.aplicacao.dominio.TipoOperacao;
+import br.com.dinheiro.irpf.aplicacao.dominio.*;
 import br.com.dinheiro.irpf.aplicacao.impl.dto.NegociacaoDTO;
 import br.com.dinheiro.irpf.aplicacao.impl.dto.OperacaoDto;
 import br.com.dinheiro.irpf.util.Util;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,16 +17,30 @@ public class Conversor {
                 .collect(Collectors.toList());
     }
 
-    public  Negociacao converterDtoNegociacao(NegociacaoDTO negociacaoDTO){
+    public Negociacao converterDtoNegociacao(NegociacaoDTO negociacaoDTO){
         return Negociacao.builder()
                 .nomeCliente(negociacaoDTO.getNomeCliente())
                 .cpf(negociacaoDTO.getCpf())
                 .idCliente(negociacaoDTO.getIdCliente())
                 .operacao(converterDtoOperacoes(negociacaoDTO.getOperacao()))
-                .irrf(converterStringParaBigDecimal(negociacaoDTO.getIrrf()))
                 .dataNegociacao(Util.formatarData(negociacaoDTO.getDataNegociacao()))
-                .emolumentos(converterStringParaBigDecimal(negociacaoDTO.getEmolumentos()))
-                .taxaLiquidacao(converterStringParaBigDecimal(negociacaoDTO.getTaxaLiquidacao()))
+                .taxa(getTaxas(negociacaoDTO))
+                .build();
+    }
+
+    private Taxas getTaxas(NegociacaoDTO dto) {
+        return Taxas.builder()
+                .emolumentos(stringParaBigDecimal(dto.getEmolumentos()))
+                .impostos(stringParaBigDecimal(dto.getImpostos()))
+                .irrf(stringParaBigDecimal(dto.getIrrf()))
+                .outrasTaxas(stringParaBigDecimal(dto.getOutrasTaxas()))
+                .taxaANA(stringParaBigDecimal(dto.getTaxaANA()))
+                .taxaCustodia(stringParaBigDecimal(dto.getTaxaCustodia()))
+                .taxaExecucao(stringParaBigDecimal(dto.getTaxaExecucao()))
+                .taxaLiquidacao(stringParaBigDecimal(dto.getTaxaLiquidacao()))
+                .taxaOperacional(stringParaBigDecimal(dto.getTaxaOperacional()))
+                .taxaRegistro(stringParaBigDecimal(dto.getTaxaRegistro()))
+                .taxaTempoOperacao(stringParaBigDecimal(dto.getTaxaTempoOperacao()))
                 .build();
     }
 
@@ -46,8 +54,8 @@ public class Conversor {
         return Operacao.builder()
                 .tipoNegociacao(operacaoDto.getTipoNegociacao())
                 .quantidade(Integer.parseInt(operacaoDto.getQuantidade()))
-                .precoAcao(converterStringParaBigDecimal(operacaoDto.getPreco()))
-                .valorOperacao(converterStringParaBigDecimal(operacaoDto.getValorOperacao()))
+                .precoAcao(stringParaBigDecimal(operacaoDto.getPreco()))
+                .valorOperacao(stringParaBigDecimal(operacaoDto.getValorOperacao()))
                 .tipoOperacao(TipoOperacao.porAbreviacao(operacaoDto.getTipoOperacao()))
                 .acao(converterDtoAcao(operacaoDto))
                 .build();
@@ -59,7 +67,7 @@ public class Conversor {
         return acao;
     }
 
-    private BigDecimal converterStringParaBigDecimal(String entrada){
+    private BigDecimal stringParaBigDecimal(String entrada){
         //TODO verificar se notas de corretagem acima de 1000 reais aparece ponto
         String numeroComPonto = entrada.replaceAll(",",".");
         return new BigDecimal(numeroComPonto);
