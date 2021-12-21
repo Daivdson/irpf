@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Strings;
 
@@ -31,7 +32,7 @@ public class Util {
     }
 
     public static BigDecimal somaBigDecimal(BigDecimal ... valor) {
-        return Arrays.stream(valor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return Arrays.stream(valor).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public static BigDecimal somaBigDecimal(List<BigDecimal> valor) {

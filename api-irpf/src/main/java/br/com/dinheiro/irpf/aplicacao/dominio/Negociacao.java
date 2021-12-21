@@ -3,12 +3,12 @@ package br.com.dinheiro.irpf.aplicacao.dominio;
 import br.com.dinheiro.irpf.util.Util;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.util.ObjectUtils;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -24,48 +24,44 @@ public class Negociacao {
     private boolean teveDayTrade;
 
     private BigDecimal totalLiquidoDasOperacoes;
-    private BigDecimal totalDeTaxas;
     private Taxas taxas;
 
     @Builder
     public Negociacao(List<Operacao> operacao, Date dataNegociacao,
-                       String nomeCliente, String cpf, String idCliente, Taxas taxa) {
+                      @NonNull String nomeCliente, @NonNull String cpf, @NonNull String idCliente, Taxas taxa) {
         this.nomeCliente = nomeCliente;
         this.cpf = cpf;
         this.idCliente = idCliente;
         this.operacao = operacao;
-        this.dataNegociacao = dataNegociacao;
-        this.taxas = taxa;
+        this.dataNegociacao = Objects.isNull(dataNegociacao) ? new Date() : dataNegociacao;
+        this.taxas = Objects.isNull(taxa) ? Taxas.builder().build() : taxa;
         this.totalCompra = calcularTotalCompra(operacao);
         this.totalVenda = calcularTotalVenda(operacao);
         this.teveDayTrade = verificarSeTeveDayTrade(operacao);
-        this.totalDeTaxas = calcularTotalDeTaxas();
         this.totalLiquidoDasOperacoes = calcularTotalLiquidoDasOperacoes();
     }
 
-    private BigDecimal calcularTotalDeTaxas() {
-        List vazio = Arrays.asList(new BigDecimal("0"));
-        return Util.somaBigDecimal(ObjectUtils.isEmpty(taxas)? vazio : taxas.toList());
+    private @NonNull BigDecimal calcularTotalLiquidoDasOperacoes() {
+          return this.totalCompra.subtract(calculaValorLiquidoDeVenda()) ;
     }
 
-    private BigDecimal calcularTotalLiquidoDasOperacoes() {
-        BigDecimal valorQuididoDeVenda = this.totalVenda.subtract(this.totalDeTaxas);
-        return this.totalCompra.subtract(valorQuididoDeVenda);
+    private @NonNull BigDecimal calculaValorLiquidoDeVenda() {
+          return this.totalVenda.subtract(taxas.totalTaxas()) ;
     }
 
-    private BigDecimal calcularTotalCompra(List<Operacao> operacao){
+    private BigDecimal calcularTotalCompra(@NonNull List<Operacao> operacao){
         BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao() == TipoOperacao.COMPRA)
                 .map(valor -> valor.getValorOperacao()).reduce(BigDecimal.ZERO, BigDecimal::add);
         return soma;
     }
 
-    private BigDecimal calcularTotalVenda(List<Operacao> operacao){
+    private BigDecimal calcularTotalVenda(@NonNull List<Operacao> operacao){
         BigDecimal soma = operacao.stream().filter(t -> t.getTipoOperacao() == TipoOperacao.VENDA)
                 .map(valor -> valor.getValorOperacao()).reduce(BigDecimal.ZERO, BigDecimal::add);
         return soma;
     }
 
-    private boolean verificarSeTeveDayTrade(List<Operacao> operacoes){
+    private boolean verificarSeTeveDayTrade(@NonNull List<Operacao> operacoes){
         List<Operacao> operacoesCompra = operacoes.stream().
                 filter(operacao -> operacao.getTipoOperacao() == TipoOperacao.COMPRA).collect(Collectors.toList());
         List<Operacao> operacoesVenda = operacoes.stream().

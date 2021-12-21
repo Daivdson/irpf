@@ -110,44 +110,48 @@ public class PdfClearImpl implements ServicoPdfClear {
 				dtoNegociacao.setCpf(linha);
 			}
 
-			if(linha.contains(TAXA_LIQUIDA))
-				dtoNegociacao.setTaxaLiquidacao(getTaxa(linha, TAXA_LIQUIDA));
-
-			if(linha.contains(TAXA_REGISTRO))
-				dtoNegociacao.setTaxaRegistro(getTaxa(linha, TAXA_REGISTRO));
-
-			if(linha.contains(TAXA_TEMPO_OPERACAO))
-				dtoNegociacao.setTaxaTempoOperacao(getTaxa(linha, TAXA_TEMPO_OPERACAO));
-
-			if(linha.contains(TAXA_ANA))
-				dtoNegociacao.setTaxaANA(getTaxa(linha, TAXA_ANA));
-
-			if(linha.contains(EMOLUMENTOS))
-				dtoNegociacao.setEmolumentos(getTaxa(linha, EMOLUMENTOS));
-
-			if(linha.contains(TAXA_OPERACIONAL))
-				dtoNegociacao.setTaxaOperacional(getTaxa(linha, TAXA_OPERACIONAL));
-
-			if(linha.contains(TAXA_EXECUCAO))
-				dtoNegociacao.setTaxaExecucao(getTaxa(linha, TAXA_EXECUCAO));
-
-			if(linha.contains(TAXA_CUSTODIA))
-				dtoNegociacao.setTaxaCustodia(getTaxa(linha, TAXA_CUSTODIA));
-
-			if(linha.contains(TAXA_IMPOSTOS))
-				dtoNegociacao.setImpostos(getTaxa(linha, TAXA_IMPOSTOS));
-
-			if(linha.contains(TAXA_IRRF))
-				dtoNegociacao.setIrrf(getTaxa(linha, TAXA_IRRF));
-
-			if(linha.contains(TAXA_OUTRAS))
-				dtoNegociacao.setOutrasTaxas(getTaxa(linha, TAXA_OUTRAS));
+			analizandoTaxas(dtoNegociacao, linha);
 		}
 
 		dtoNegociacao.setOperacao(dtoDeOperacoes);
 		return dtoNegociacao;
 	}
-	
+
+	private void analizandoTaxas(NegociacaoDTO dtoNegociacao, String linha) {
+		if(linha.contains(TAXA_LIQUIDA))
+			dtoNegociacao.setTaxaLiquidacao(getTaxa(linha, TAXA_LIQUIDA));
+
+		if(linha.contains(TAXA_REGISTRO))
+			dtoNegociacao.setTaxaRegistro(getTaxa(linha, TAXA_REGISTRO));
+
+		if(linha.contains(TAXA_TEMPO_OPERACAO))
+			dtoNegociacao.setTaxaTempoOperacao(getTaxa(linha, TAXA_TEMPO_OPERACAO));
+
+		if(linha.contains(TAXA_ANA))
+			dtoNegociacao.setTaxaANA(getTaxa(linha, TAXA_ANA));
+
+		if(linha.contains(EMOLUMENTOS))
+			dtoNegociacao.setEmolumentos(getTaxa(linha, EMOLUMENTOS));
+
+		if(linha.contains(TAXA_OPERACIONAL))
+			dtoNegociacao.setTaxaOperacional(getTaxa(linha, TAXA_OPERACIONAL));
+
+		if(linha.contains(TAXA_EXECUCAO))
+			dtoNegociacao.setTaxaExecucao(getTaxa(linha, TAXA_EXECUCAO));
+
+		if(linha.contains(TAXA_CUSTODIA))
+			dtoNegociacao.setTaxaCustodia(getTaxa(linha, TAXA_CUSTODIA));
+
+		if(linha.contains(TAXA_IMPOSTOS))
+			dtoNegociacao.setImpostos(getTaxa(linha, TAXA_IMPOSTOS));
+
+		if(linha.contains(TAXA_IRRF))
+			dtoNegociacao.setIrrf(getTaxa(linha, TAXA_IRRF));
+
+		if(linha.contains(TAXA_OUTRAS))
+			dtoNegociacao.setOutrasTaxas(getTaxa(linha, TAXA_OUTRAS));
+	}
+
 	private String getTaxa(String linhaDaTaxa, String taxa) {
 		List<String> linhaSeparada = getLinhaSeparada(linhaDaTaxa, taxa);
 		return linhaSeparada != null ? linhaSeparada.get(0) : null;
