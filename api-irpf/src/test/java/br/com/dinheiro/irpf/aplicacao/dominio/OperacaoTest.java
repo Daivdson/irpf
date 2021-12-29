@@ -54,7 +54,7 @@ public class OperacaoTest {
     }
 
     @Test
-    public void semDadosBaseDaOperacao() {
+    public void semDadosBasicoDaOperacao() {
         assertThrows(IllegalArgumentException.class, () -> Operacao.builder()
                 .tipoNegociacao("1-BOVESPA")
                 .precoAcao(BigDecimal.valueOf(10.23))

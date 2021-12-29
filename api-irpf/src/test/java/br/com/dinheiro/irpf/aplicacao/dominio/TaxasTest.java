@@ -14,7 +14,7 @@ public class TaxasTest {
     }
 
     @Test
-    public void taxasComValores() {
+    public void somaDasTaxas() {
         Taxas taxa = Taxas.builder()
                 .taxaLiquidacao(new BigDecimal("1.0"))
                 .taxaANA(new BigDecimal("2.12"))
