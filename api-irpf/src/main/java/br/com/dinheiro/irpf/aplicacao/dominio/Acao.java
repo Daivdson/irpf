@@ -6,13 +6,13 @@ import lombok.Getter;
 @Getter
 public class Acao {
 	private String nome;
-	private String codigo;
+	//private String codigo;
 	private String tipo;
 	
 	@Builder
-	public Acao(String nome, String codigo, String tipo) {
+	public Acao(String nome, String tipo) {
 		this.nome = nome;
-		this.codigo = codigo;
+		//this.codigo = codigo;
 		this.tipo = tipo;
 	}
 	
