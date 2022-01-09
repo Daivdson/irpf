@@ -1,0 +1,7 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 15000KB
+      max-request-size: 15000KB
+      enabled: true
+      location: ${java.io.tmpdir}

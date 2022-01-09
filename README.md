@@ -1,9 +1,19 @@
-# irpf
-Projeto para declaração de imposto de renda com base nas notas de corretagem.
 
-### Para rodar em desenvolvimento, seguir os seguintes passos:
-1. Rodar direto da IDE a classe App, lembrando de informar o profile para a jvm com `-Dspring.profiles.active=dev`
 
-2. (Alternativa) `mvn spring-boot:run -Drun.profiles=dev`
+# API irpf
+Api de importação e leitura das notas de corretagem.
 
-3. Após start da aplicação é possível acessar pelo link: [http://localhost:8085/](http://localhost:8085/)
+Ideia para o domínio dos dados extraídos: [https://miro.com/app/board/o9J_loak7CA=/?invite_link_id=785499274109](https://miro.com/app/board/o9J_loak7CA=/?invite_link_id=785499274109)
+
+## Fluxo de importação API
+
+![Fluxo](/docs/fluxo-importacao.svg)
+
+**Método `POST` para importação do arquivo:**
+ - tipo arquivo
+ - 10Mb tamanho máximo
+ - 1 arquivo por vez
+ - Retorna url do aquivo e nome do arquivo
+
+**Método `GET` para consultar arquivo importado**
+Parâmetro necessário: nome do arquivo
