@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 public class NegociacaoDTO {
     private String nomeCliente;
