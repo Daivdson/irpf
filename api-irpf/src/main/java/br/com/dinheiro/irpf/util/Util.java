@@ -1,6 +1,8 @@
 package br.com.dinheiro.irpf.util;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -37,5 +39,21 @@ public class Util {
 
     public static BigDecimal somaBigDecimal(List<BigDecimal> valor) {
         return valor.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public static BigDecimal stringParaBigDecimalTendoVirgulaComoDecimal(String valor) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        String pattern = "";
+        DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
+        decimalFormat.setParseBigDecimal(true);
+
+        try {
+            return Objects.nonNull(valor) ? (BigDecimal) decimalFormat.parse(valor) : null;
+        } catch (ParseException e) {
+            log.error("Não foi possível fazer o cast da String para BigDecimal ", e);
+            return null;
+        }
     }
 }
