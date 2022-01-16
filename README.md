@@ -12,7 +12,7 @@ Ideia para o domínio dos dados extraídos: [https://miro.com/app/board/o9J_loak
  - tipo arquivo
  - 10Mb tamanho máximo
  - 1 arquivo por vez
- - Retorna Json com dados extraídos
+ - Retorna chave da importacao
 
 # Relatório de declaração IRRF (Bolsa de valores)
 O relatório completo vai contemplar o período de 1 ano. Pode ser gerado alguns relatórios específicos sendo possível passar o período como parâmetro.
