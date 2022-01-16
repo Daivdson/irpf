@@ -34,7 +34,7 @@ Deve ser lançado a posição atual da sua carteira, posição atual do dia 31/1
 **Dividas e ônus reais** 
 Só é lançando caso você vire o ano vendido em alguma ação, caso contrario não é necessário.
 
-** Rendimentos sujeitos a tributação exclusiva/definitiva**
+**Rendimentos sujeitos a tributação exclusiva/definitiva**
 
 -   **Juros sobre capital próprio opção 10:** Total recebido no ano de cada empresa, inserir empresa por empresa do total recebido no ano por essa empresa.
     
