@@ -102,3 +102,6 @@ Na descriminação informar: Saldo na corretora Clear.
 | Query parâmetro |  |
 |--|--|
 | ano | Ano para geração de relatório se null considera último ano `ex: ano=2021` |
+
+## Bens e direito - {inicio}/relatorio/{ano}/bens-e-direito/{idCliente}
+![bens-e-direito](/docs/bens-direito.png)
